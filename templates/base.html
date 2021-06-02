@@ -21,6 +21,7 @@
             <a href="{% url 'logout' %}" class="nav-link ml-auto">Logout</a>
             {% else %}
             <a href="{% url 'profile' %}" class="nav-link ml-auto">Profile</a>
+            <a href="{% url 'logout' %}" class="nav-link ml-auto">Logout</a>
           {% endif %}
         {% else %}
           <a href="{% url 'login' %}" class="nav-link">Login</a>
@@ -28,7 +29,7 @@
       </div>
     </nav>
     <div class="container-sm">
-      {% if user.is_authenticated == False %}
+      {% if user.is_authenticated == False and request.path == "/" %}
         <div class="text-center">
           <legend>
           <br>
