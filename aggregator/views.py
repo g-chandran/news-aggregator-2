@@ -1,5 +1,5 @@
 from django.views.generic import TemplateView, ListView
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from .models import Subscription, Profile, Article
 
 from dateutil.parser import parse as p
@@ -71,3 +71,15 @@ class HomeListView(ListView):
             return result
         else:
             return Article.objects.all().order_by('-published')
+
+
+class SubscriptionListView(ListView):
+    model = Article
+    template_name = "subscription.html"
+    context_object_name = "articles"
+    paginate_by = 20
+
+    def get_queryset(self):
+        subscriptions = get_object_or_404(
+            Subscription, name=self.kwargs.get('name'))
+        return Article.objects.filter(subscription_name=subscriptions).order_by('-published')
