@@ -70,6 +70,17 @@ TEMPLATES = [
         },
     },
 ]
+CACHES = {
+    'default': {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "PASSWORD": "my_password"
+        },
+        "KEY_PREFIX": "example"
+    }
+}
 
 WSGI_APPLICATION = 'news_aggregator.wsgi.application'
 
@@ -140,3 +151,4 @@ LOGOUT_REDIRECT_URL = "login"
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 CELERY_BROKER_URL = "amqp://localhost"
+CACHE_TTL = 60 * 2
