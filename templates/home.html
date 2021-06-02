@@ -1,3 +1,50 @@
-{% extends 'base.html' %} {% block content %}
-<h2>Hello, World!</h2>
+{% extends 'base.html' %} 
+{% load humanize %}
+{% block content %}
+<div>
+  {% if articles.count == 0 %}
+    <div class="text-center"> <br>
+    <a href="#" class="btn btn-outline-info mb-4">Go profile to add sources</a>
+    </div>
+  {% else %}
+    {% for data in articles %} <br>
+      <div class="container-sm media border rounded" style="padding:20px"> <br>
+        <a href="{{data.subscription_name.site_link}}">
+          <img src="{{data.media}}" class="align-self-start mr-3" alt="{{data.title}}" width=184 height=111>
+        </a>
+        <div class="media-body">
+          <h5 class="mt-0"><a href="{{data.article_link}}" target="_blank">{{data.title}}</a></h5>
+          {% if data.author == ' ' %}
+            <div>
+              <h6><a href="#">{{data.subscription_name.name}} </a><small>{{data.published|naturaltime}}</small></h6>
+            </div>
+          {% else %}
+            <h6>{{data.author}} from <a href="#">{{data.subscription_name.name}} </a><small>{{data.published|naturaltime}}</small></h6>
+          {% endif %}
+          <p>{{data.summary}}</p>
+        </div>
+      </div>
+    {% endfor %} <br>
+
+    {% if is_paginated %}
+      {% if page_obj.has_previous %}
+        <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+          <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+      {% endif %}
+    {% endif %} 
+  {% endif %}
+</div>
 {% endblock content %}

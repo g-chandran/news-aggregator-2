@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import HomeView
+from .views import aggregator, HomeListView
 
 urlpatterns = [
-    path('', HomeView.as_view(), name="home"),
+    path('', HomeListView.as_view(), name="home"),
+    path('aggregate/', aggregator, name="aggregator")
 ]
