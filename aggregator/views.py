@@ -44,10 +44,13 @@ class SubscriptionListView(ListView):
         return Article.objects.filter(subscription_name=subscriptions).order_by('-published')
 
 
+def dummy():
+    aggregator.delay()
+
+
 @login_required
 def profile_view(request):
-    aggregator.delay()
-    print("Crossed aggregator")
+    # aggregator.delay()
     subscriptions = Subscription.objects.all()
     current_user_profile = Profile.objects.filter(name=request.user)
     current_user_subscriptions = [

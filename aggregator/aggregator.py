@@ -6,7 +6,7 @@ from dateutil.parser import parse as p
 from celery import shared_task
 
 
-@shared_task
+@shared_task(name="start_aggregating")
 def aggregator():
     updateList = []
     subscriptions = Subscription.objects.all()
