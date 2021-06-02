@@ -1,9 +1,8 @@
 from django.urls import path
-from .views import aggregator, HomeListView, SubscriptionListView, profile_view, add_profile, remove_profile, SignupView
+from .views import HomeListView, SubscriptionListView, profile_view, add_profile, remove_profile, SignupView
 
 urlpatterns = [
     path('', HomeListView.as_view(), name="home"),
-    path('aggregate/', aggregator, name="aggregator"),
     path('subscription/<str:name>',
          SubscriptionListView.as_view(), name="subscription"),
     path('profile/', profile_view, name='profile'),

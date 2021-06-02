@@ -139,3 +139,4 @@ LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "login"
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
+CELERY_BROKER_URL = "amqp://localhost"
