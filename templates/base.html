@@ -18,14 +18,12 @@
       <div class="navbar-nav ml-auto">
         {% if user.is_authenticated %}
           {% if request.path == '/profile/' or "remove" in request.path or "add" in request.path %}
-            {% comment %} <a href="{% url 'logout' %}" class="nav-link ml-auto">Logout</a> {% endcomment %}
-            <p>Add Logout here</p>
+            <a href="{% url 'logout' %}" class="nav-link ml-auto">Logout</a>
             {% else %}
             <a href="{% url 'profile' %}" class="nav-link ml-auto">Profile</a>
           {% endif %}
         {% else %}
-          {% comment %} <a href="{% url 'login' %}" class="nav-link">Login</a> {% endcomment %}
-          <p>Add Login here</p>
+          <a href="{% url 'login' %}" class="nav-link">Login</a>
         {% endif %}
       </div>
     </nav>

@@ -1,6 +1,8 @@
 from django.contrib.auth.decorators import login_required
-from django.views.generic import TemplateView, ListView
+from django.views.generic import CreateView, ListView
 from django.shortcuts import get_object_or_404, render
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
 from .models import Subscription, Profile, Article
 
 from dateutil.parser import parse as p
@@ -124,3 +126,9 @@ def remove_profile(request, id):
     context = {'subscriptions': subscriptions,
                'current_subscriptions': current_user_subscriptions}
     return render(request, 'profile.html', context)
+
+
+class SignupView(CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('login')
+    template_name = "signup.html"
