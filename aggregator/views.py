@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 from django.shortcuts import render
 from .models import Subscription, Profile, Article
 
@@ -23,10 +23,6 @@ def getMedia(entry):
         html = BeautifulSoup(entry.summary, "html.parser")
         media = html.find('img')['src']
     return media
-
-
-class HomeView(TemplateView):
-    template_name = "home.html"
 
 
 def aggregator(request):
@@ -56,3 +52,22 @@ def aggregator(request):
             print(f"{subscription.name} done")
     print(updateList)
     # return render(request, 'aggregator.html', {'updateList': updateList})
+
+
+class HomeListView(ListView):
+    model = Article
+    template_name = "home.html"
+    context_object_name = "articles"
+    paginate_by = 20
+
+    def get_queryset(self):
+        current_user = self.request.user
+        if current_user.is_authenticated:
+            subscription_object = Profile.objects.filter(name=current_user)
+            subscriptions = [
+                object.subscription for object in subscription_object]
+            result = Article.objects.filter(
+                subscription_name__in=subscriptions).order_by('-published')
+            return result
+        else:
+            return Article.objects.all().order_by('-published')
