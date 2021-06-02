@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView, ListView
 from django.shortcuts import get_object_or_404, render
 from .models import Subscription, Profile, Article
@@ -83,3 +84,43 @@ class SubscriptionListView(ListView):
         subscriptions = get_object_or_404(
             Subscription, name=self.kwargs.get('name'))
         return Article.objects.filter(subscription_name=subscriptions).order_by('-published')
+
+
+@login_required
+def profile_view(request):
+    subscriptions = Subscription.objects.all()
+    current_user_profile = Profile.objects.filter(name=request.user)
+    current_user_subscriptions = [
+        sub.subscription.name for sub in current_user_profile]
+    context = {'subscriptions': subscriptions,
+               'current_subscriptions': current_user_subscriptions}
+    return render(request, 'profile.html', context)
+
+
+@login_required
+def add_profile(request, id):
+    requested_subscription = get_object_or_404(Subscription, id=id)
+    subscriptions = Subscription.objects.all()
+    p = Profile.objects.create(
+        name=request.user, subscription=requested_subscription)
+    p.save()
+    current_user_profile = Profile.objects.filter(name=request.user)
+    current_user_subscriptions = [
+        sub.subscription.name for sub in current_user_profile]
+    context = {'subscriptions': subscriptions,
+               'current_subscriptions': current_user_subscriptions}
+    return render(request, 'profile.html', context)
+
+
+@login_required
+def remove_profile(request, id):
+    requested_subscription = get_object_or_404(Subscription, id=id)
+    subscriptions = Subscription.objects.all()
+    Profile.objects.filter(
+        name=request.user, subscription=requested_subscription).delete()
+    current_user_profile = Profile.objects.filter(name=request.user)
+    current_user_subscriptions = [
+        sub.subscription.name for sub in current_user_profile]
+    context = {'subscriptions': subscriptions,
+               'current_subscriptions': current_user_subscriptions}
+    return render(request, 'profile.html', context)

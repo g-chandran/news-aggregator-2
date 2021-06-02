@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+<br>
+  <div style="margin-top:20px, width:50%;" class="container-sm border rounded">
+    <br>
+    <h3>Hello {{user.username}},</h3>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Source</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+        {% for subscription in subscriptions %}
+          {% if subscription.name in current_subscriptions %}
+            <tr>
+              <th>{{subscription.name}}</th>
+              <th><a href="{% url 'remove-profile' subscription.id %}" class="btn btn-outline-danger mb-4">Remove</a></th>
+            </tr>
+            {% else %}
+            <tr>
+              <th>{{subscription.name}}</th>
+              <th><a href="{% url 'add-profile' subscription.id %}" class="btn btn-outline-success mb-4">Add</a></th>
+            </tr>
+          {% endif %}
+        {% endfor %}
+    </table>
+    <a href="{% url 'home' %}" class="btn btn-outline-info mb-4">Go to home</a>
+  </div>
+  {% else %}
+  <h1>You are not logged In. Please Login to Continue</h1>
+{% endif %}
+{% endblock content %}
