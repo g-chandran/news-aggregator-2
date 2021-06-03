@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+  <br>
+  <div class="container-md">
+    <img src="{{ article_info.media }}" alt="{{ article_info.title }}" class="rounded mx-auto d-block">
+    <h1 class="display-5">{{ article_info.title }}</h1>
+    <p class="display-5">by {{ article_info.author }} at {{ article_info.published }}</p>
+    <p class="display-5">Source: <a href="{{ article_info.article_link }}" target="_blank">{{ article_info.subscription_name.name }}</a></p>
+    <p>{{ article_info.article }}</p>
+  </div>
+{% endblock content %}

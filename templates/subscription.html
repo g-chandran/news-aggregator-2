@@ -12,7 +12,12 @@
           <img src="{{data.media}}" class="align-self-start mr-3" alt="{{data.title}}" width=184 height=111>
         </a>
         <div class="media-body">
-          <h5 class="mt-0"><a href="{{data.article_link}}" target="_blank">{{data.title}}</a></h5>
+          {% if data.article != " " %}
+            <span class="is-article-available"></span>
+            <h5 class="mt-0 h2-article-available"><a href={% url 'show-article' data.id %}>{{data.title}}</a></h5>
+          {% else %}
+            <h5 class="mt-0"><a href="{{data.article_link}}" target="_blank">{{ data.title }}</a></h5>
+          {% endif %}
           {% if data.author != ' ' %}
             <h6>by {{data.author}} <small>{{data.published|naturaltime}}</small></h6>
           {% else %}

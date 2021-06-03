@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, DetailView
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
@@ -34,6 +34,12 @@ class HomeListView(ListView):
             return Article.objects.all().order_by('-published')
 
 
+class ArticleDetailView(DetailView):
+    model = Article
+    template_name = "article.html"
+    context_object_name = "article_info"
+
+
 class SubscriptionListView(ListView):
     model = Article
     template_name = "subscription.html"
@@ -46,7 +52,7 @@ class SubscriptionListView(ListView):
         return Article.objects.filter(subscription_name=subscriptions).order_by('-published')
 
 
-def getArticlesAsCSV(request):
+def get_articles_as_CSV(request):
     current_user = request.user
     if current_user.is_authenticated:
         current_user_profile = Profile.objects.filter(name=current_user)
@@ -77,7 +83,6 @@ def dummy():
 
 @login_required
 def profile_view(request):
-    # aggregator.delay()
     subscriptions = Subscription.objects.all()
     current_user_profile = Profile.objects.filter(name=request.user)
     current_user_subscriptions = [
