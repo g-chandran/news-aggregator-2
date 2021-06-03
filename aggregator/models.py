@@ -23,6 +23,7 @@ class Article(models.Model):
     media = models.URLField()
     article_id = models.CharField(max_length=200, unique=True)
     article_link = models.URLField()
+    article = models.CharField(max_length=50000)
 
     def __str__(self):
         return f"{self.subscription_name.name}: {self.title}"
