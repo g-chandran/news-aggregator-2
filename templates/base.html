@@ -20,6 +20,7 @@
           {% if request.path == '/profile/' or "remove" in request.path or "add" in request.path %}
             <a href="{% url 'logout' %}" class="nav-link ml-auto">Logout</a>
             {% else %}
+            <a href="{% url 'download-articles' %}" class="nav-link ml-auto">Download All News</a>
             <a href="{% url 'profile' %}" class="nav-link ml-auto">Profile</a>
             <a href="{% url 'logout' %}" class="nav-link ml-auto">Logout</a>
           {% endif %}

@@ -3,6 +3,8 @@ from django.views.generic import CreateView, ListView
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
+from django.http import HttpResponse
+import csv
 from .models import Subscription, Profile, Article
 from .aggregator import aggregator
 
@@ -42,6 +44,31 @@ class SubscriptionListView(ListView):
         subscriptions = get_object_or_404(
             Subscription, name=self.kwargs.get('name'))
         return Article.objects.filter(subscription_name=subscriptions).order_by('-published')
+
+
+def getArticlesAsCSV(request):
+    current_user = request.user
+    if current_user.is_authenticated:
+        current_user_profile = Profile.objects.filter(name=current_user)
+        subscriptions = [
+            object.subscription for object in current_user_profile]
+        articles = Article.objects.filter(
+            subscription_name__in=subscriptions).order_by('-published')
+    else:
+        articles = Article.objects.all().order_by('-published')
+
+    extracted_articles = [[x.subscription_name.name, x.title,
+                           x.author, x.article_link, x.published, x.summary] for x in articles]
+
+    TITLES = ['Subscription', 'Title', 'Author',
+              'URL', 'Published on', 'Summary']
+
+    response = HttpResponse(
+        content_type="text/csv", headers={'Content-Disposition': "attachment; filename=articles.csv"})
+    csv_writer = csv.writer(response)
+    csv_writer.writerow(TITLES)
+    csv_writer.writerows(extracted_articles)
+    return response
 
 
 def dummy():
