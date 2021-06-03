@@ -151,4 +151,4 @@ LOGOUT_REDIRECT_URL = "login"
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 CELERY_BROKER_URL = "amqp://localhost"
-CACHE_TTL = 60 * 2
+CACHE_TTL = 60 * 10
